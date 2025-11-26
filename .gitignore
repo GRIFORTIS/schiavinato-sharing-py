@@ -1,8 +1,16 @@
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Python
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
 .Python
+env/
+venv/
+ENV/
 build/
 develop-eggs/
 dist/
@@ -18,12 +26,15 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
-venv/
-ENV/
+
+# Testing
 .pytest_cache/
 .coverage
 htmlcov/
-.mypy_cache/
-.ruff_cache/
-.DS_Store
 
+# Editor directories and files
+.vscode/*
+.idea
+*.swp
+*.swo
+*~
