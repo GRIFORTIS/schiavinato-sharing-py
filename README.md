@@ -1,4 +1,4 @@
-# schiavinato-sharing
+# schiavinato-sharing-py
 
 **Python library for Schiavinato Sharing**
 
