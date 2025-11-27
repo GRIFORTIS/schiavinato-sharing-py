@@ -6,6 +6,16 @@ Thank you for your interest in contributing to the Python implementation of Schi
 
 **This project is in early development.** We're building the Python library from scratch based on the [Schiavinato Sharing specification](https://github.com/GRIFORTIS/schiavinato-sharing-spec).
 
+### Zero-Knowledge Protocol
+
+GRIFORTIS operates under a strict zero-knowledge protocol for consultancy and professional services. This principle informs our technical design:
+
+- **User sovereignty**: Tools must enable users to maintain exclusive control of secrets
+- **No custody assumptions**: Never design features that require trusting third parties with mnemonics
+- **Advisory interfaces**: Guide users through processes they execute themselves
+
+This library implements the core cryptographic operations while maintaining these principles.
+
 ## 🚀 Getting Started
 
 ### Prerequisites
