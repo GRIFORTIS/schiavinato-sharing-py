@@ -237,7 +237,7 @@ See [SECURITY.md](.github/SECURITY.md) for reporting vulnerabilities.
 This implementation is based on:
 - Shamir, A. (1979). "How to Share a Secret"
 - BIP39: Mnemonic code for generating deterministic keys
-- The Schiavinato Sharing specification by Renato Schiavinato Lopez
+- The Schiavinato Sharing specification by **Renato Schiavinato Lopez**, creator of Schiavinato Sharing and founder of GRIFORTIS
 
 ---
 
