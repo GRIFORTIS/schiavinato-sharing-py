@@ -20,8 +20,9 @@ This library implements the core cryptographic operations while maintaining thes
 
 ### Prerequisites
 
-- **Python**: 3.9, 3.10, 3.11, or 3.12
+- **Python**: 3.12 (We recommend using [pyenv](https://github.com/pyenv/pyenv) to manage versions)
 - **pip**: Latest version
+- **Tip**: This project includes a `.python-version` file. If you use pyenv, it will automatically switch to the correct version.
 - **Git**: Latest stable version
 
 ### Setup
@@ -48,7 +49,7 @@ pytest
 
 Before implementing, review:
 
-1. **[Whitepaper](https://github.com/GRIFORTIS/schiavinato-sharing-spec/blob/main/WHITEPAPER.md)** – Full specification
+1. **[Whitepaper](https://github.com/GRIFORTIS/schiavinato-sharing-spec/releases/latest/download/WHITEPAPER.pdf)** ([LaTeX source](https://github.com/GRIFORTIS/schiavinato-sharing-spec/blob/main/WHITEPAPER.tex)) – Full specification
 2. **[Test Vectors](https://github.com/GRIFORTIS/schiavinato-sharing-spec/blob/main/TEST_VECTORS.md)** – Expected outputs
 3. **[JavaScript Implementation](https://github.com/GRIFORTIS/schiavinato-sharing-js)** – Reference implementation
 

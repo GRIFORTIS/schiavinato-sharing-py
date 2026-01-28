@@ -18,17 +18,11 @@ We're working on implementing the full Schiavinato Sharing specification in Pyth
 
 ### Current Status
 
-- [ ] Core GF(2053) field arithmetic
-- [ ] Polynomial operations
-- [ ] Lagrange interpolation
-- [ ] Mnemonic splitting
-- [ ] Mnemonic recovery
-- [ ] Checksum generation and validation
-- [ ] Comprehensive test suite
-- [ ] Documentation
-- [ ] PyPI package
-
-**Estimated availability**: Q1 2026
+- Core GF(2053) arithmetic, polynomial ops, Lagrange interpolation
+- BIP39 mnemonic split/recover with row + global checksums
+- v0.4.0 parity with JS: dual-path checksum validation, checksum polynomials,
+  security utilities, configurable randomness, and mnemonic helpers
+- Comprehensive test suite in progress; PyPI publish forthcoming
 
 ---
 
@@ -97,7 +91,7 @@ This library implements the Schiavinato Sharing specification:
 🔗 **[Specification Repository](https://github.com/GRIFORTIS/schiavinato-sharing-spec)**
 
 Key documents:
-- [Whitepaper](https://github.com/GRIFORTIS/schiavinato-sharing-spec/blob/main/WHITEPAPER.md) – Complete mathematical description
+- [Whitepaper](https://github.com/GRIFORTIS/schiavinato-sharing-spec/releases/latest/download/WHITEPAPER.pdf) ([LaTeX source](https://github.com/GRIFORTIS/schiavinato-sharing-spec/blob/main/WHITEPAPER.tex)) – Complete mathematical description
 - [Test Vectors](https://github.com/GRIFORTIS/schiavinato-sharing-spec/blob/main/TEST_VECTORS.md) – Validation data
 - [Reference Implementation](https://github.com/GRIFORTIS/schiavinato-sharing-spec/tree/main/reference-implementation) – HTML tool
 
@@ -184,7 +178,7 @@ We welcome contributions! This project is in early development, so there's plent
 
 ### Getting Started
 
-1. **Read the spec**: [Schiavinato Sharing Whitepaper](https://github.com/GRIFORTIS/schiavinato-sharing-spec/blob/main/WHITEPAPER.md)
+1. **Read the spec**: [Schiavinato Sharing Whitepaper](https://github.com/GRIFORTIS/schiavinato-sharing-spec/releases/latest/download/WHITEPAPER.pdf) ([LaTeX source](https://github.com/GRIFORTIS/schiavinato-sharing-spec/blob/main/WHITEPAPER.tex))
 2. **Check test vectors**: [TEST_VECTORS.md](https://github.com/GRIFORTIS/schiavinato-sharing-spec/blob/main/TEST_VECTORS.md)
 3. **Look at JS implementation**: [schiavinato-sharing-js](https://github.com/GRIFORTIS/schiavinato-sharing-js) for reference
 4. **Open an issue**: Discuss your contribution before starting
