@@ -46,7 +46,8 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     # Pinned for deterministic CI and reproducible tooling behavior
-    "pytest==9.0.2",
+    # Keep pins compatible with the lowest supported runtime (Python 3.9)
+    "pytest==8.4.2",
     "pytest-cov==7.0.0",
     "mypy==1.19.1",
     "black==26.1.0",
