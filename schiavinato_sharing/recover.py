@@ -5,8 +5,6 @@ This module implements the share recovery (reconstruction) logic for
 Schiavinato Sharing over GF(2053).
 """
 
-from typing import Optional
-
 from mnemonic import Mnemonic
 
 from .checksums import WORDS_PER_ROW, compute_global_integrity_check, compute_row_checks
@@ -27,7 +25,7 @@ def _normalize_share_value(value: int, label: str) -> int:
 def recover_mnemonic(
     shares: list[Share],
     word_count: int,
-    wordlist: Optional[list[str]] = None,
+    wordlist: list[str] | None = None,
     strict_validation: bool = True,
 ) -> RecoveryResult:
     """

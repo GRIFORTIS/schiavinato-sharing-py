@@ -5,7 +5,7 @@ This module defines all data classes and types used by the library.
 """
 
 from dataclasses import dataclass, field
-from typing import Optional, TypedDict, cast
+from typing import TypedDict, cast
 
 
 @dataclass
@@ -34,7 +34,7 @@ RecoveryErrors = TypedDict(
         "row": list[int],
         "global": bool,
         "bip39": bool,
-        "generic": Optional[str],
+        "generic": str | None,
         "rowPathMismatch": list[int],
         "globalPathMismatch": bool,
     },
@@ -47,7 +47,7 @@ class RecoveryResult:
     Result object returned by the recovery function.
     """
 
-    mnemonic: Optional[str] = None
+    mnemonic: str | None = None
     """The recovered mnemonic phrase (None if recovery failed)"""
 
     errors: RecoveryErrors = field(

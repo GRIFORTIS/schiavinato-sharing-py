@@ -5,8 +5,6 @@ This module implements the share generation (splitting) logic for
 Schiavinato Sharing over GF(2053).
 """
 
-from typing import Optional
-
 from mnemonic import Mnemonic
 
 from .checksums import (
@@ -29,7 +27,7 @@ def split_mnemonic(
     mnemonic: str,
     k: int,
     n: int,
-    wordlist: Optional[list[str]] = None,
+    wordlist: list[str] | None = None,
 ) -> list[Share]:
     """
     Splits a BIP39 mnemonic into n Shamir shares with threshold k.

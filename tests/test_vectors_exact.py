@@ -52,7 +52,8 @@ class TestVectorsExactReproduction:
         # Construct word polynomials f(x) = a0 + a1*x manually
         # Each polynomial is [a0, a1] (constant term, x^1 term)
         word_polynomials = [
-            [secret, coeff] for secret, coeff in zip(self.WORD_INDICES, self.COEFFICIENTS)
+            [secret, coeff]
+            for secret, coeff in zip(self.WORD_INDICES, self.COEFFICIENTS, strict=True)
         ]
 
         # Compute derived checksum polynomials (deterministic)

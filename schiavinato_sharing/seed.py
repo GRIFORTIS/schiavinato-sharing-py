@@ -8,7 +8,6 @@ Indexing policy:
 """
 
 import hashlib
-from typing import Optional
 
 from mnemonic import Mnemonic
 
@@ -23,7 +22,7 @@ def generate_valid_mnemonic(word_count: int) -> str:
     return mnemo.generate(strength=strength)
 
 
-def mnemonic_to_indices(mnemonic: str, wordlist: Optional[list[str]] = None) -> list[int]:
+def mnemonic_to_indices(mnemonic: str, wordlist: list[str] | None = None) -> list[int]:
     if wordlist is None:
         mnemo = Mnemonic("english")
         wordlist = mnemo.wordlist
@@ -41,7 +40,7 @@ def mnemonic_to_indices(mnemonic: str, wordlist: Optional[list[str]] = None) -> 
     return indices
 
 
-def indices_to_mnemonic(indices: list[int], wordlist: Optional[list[str]] = None) -> str:
+def indices_to_mnemonic(indices: list[int], wordlist: list[str] | None = None) -> str:
     if wordlist is None:
         mnemo = Mnemonic("english")
         wordlist = mnemo.wordlist
@@ -55,7 +54,7 @@ def indices_to_mnemonic(indices: list[int], wordlist: Optional[list[str]] = None
 
 
 def parse_input(
-    input_text: str, wordlist: Optional[list[str]] = None
+    input_text: str, wordlist: list[str] | None = None
 ) -> tuple[list[str], list[int], str]:
     """
     Parse input containing words or indices. Returns (words, indices, type).
@@ -96,7 +95,7 @@ def parse_input(
     return words, indices, kind
 
 
-def validate_bip39_mnemonic(mnemonic: str, wordlist: Optional[list[str]] = None) -> bool:
+def validate_bip39_mnemonic(mnemonic: str, wordlist: list[str] | None = None) -> bool:
     """
     Native BIP39 mnemonic checksum validation (constant-time checksum compare).
 

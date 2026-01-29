@@ -5,12 +5,12 @@ This module implements polynomial creation and evaluation for Shamir's Secret Sh
 """
 
 import secrets
-from typing import Callable, Optional
+from collections.abc import Callable
 
 from .field import FIELD_PRIME, mod, mod_add, mod_mul
 
 # Optional injectable randomness source for testing/parity with JS
-_random_source: Optional[Callable[[int], bytes]] = None
+_random_source: Callable[[int], bytes] | None = None
 
 
 def configure_random_source(source: Callable[[int], bytes]) -> None:
