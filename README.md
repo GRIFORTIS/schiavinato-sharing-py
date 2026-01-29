@@ -12,9 +12,9 @@ Human-executable secret sharing for BIP39 mnemonics using GF(2053).
 
 ## ⚠️ Status: Work in Progress
 
-**This library is currently under development and not yet ready for use.**
+**This library is functional but experimental (v0.4.0).**
 
-We're working on implementing the full Schiavinato Sharing specification in Python. If you'd like to contribute or follow progress, see the [Contributing](#-contributing) section below.
+It is **not professionally audited**. Do not use for real funds until you have done your own review and the project has undergone independent security review.
 
 ### Current Status
 
@@ -22,7 +22,7 @@ We're working on implementing the full Schiavinato Sharing specification in Pyth
 - BIP39 mnemonic split/recover with row + global checksums
 - v0.4.0 parity with JS: dual-path checksum validation, checksum polynomials,
   security utilities, configurable randomness, and mnemonic helpers
-- Comprehensive test suite in progress; PyPI publish forthcoming
+- Comprehensive test suite (62 tests) with cross-implementation vectors
 
 ---
 
@@ -37,7 +37,7 @@ Schiavinato Sharing is a secret-sharing scheme specifically designed for **BIP39
 
 ---
 
-## 📦 Installation (When Available)
+## 📦 Installation
 
 ```bash
 pip install schiavinato-sharing
@@ -45,7 +45,7 @@ pip install schiavinato-sharing
 
 ---
 
-## 🚀 Quick Start (Planned API)
+## 🚀 Quick Start
 
 ### Splitting a Mnemonic
 
@@ -53,16 +53,14 @@ pip install schiavinato-sharing
 from schiavinato_sharing import split_mnemonic
 
 mnemonic = 'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about'
-threshold = 2  # Minimum shares needed to recover
-total_shares = 3  # Total shares to create
+k = 2  # threshold
+n = 3  # total shares
 
-shares = split_mnemonic(mnemonic, threshold, total_shares)
-print(shares)
-# [
-#   'share 1 of 3: word1 word2 ... wordN [checksum]',
-#   'share 2 of 3: word1 word2 ... wordN [checksum]',
-#   'share 3 of 3: word1 word2 ... wordN [checksum]'
-# ]
+shares = split_mnemonic(mnemonic, k, n)
+print(shares[0].share_number)
+print(shares[0].word_shares[:3])
+print(shares[0].checksum_shares)
+print(shares[0].global_integrity_check_share)
 ```
 
 ### Recovering a Mnemonic
@@ -70,14 +68,11 @@ print(shares)
 ```python
 from schiavinato_sharing import recover_mnemonic
 
-shares = [
-    'share 1 of 3: word1 word2 ... wordN [checksum]',
-    'share 2 of 3: word1 word2 ... wordN [checksum]'
-]
-
-recovered = recover_mnemonic(shares)
-print(recovered)
-# 'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about'
+result = recover_mnemonic(shares[:2], word_count=12, strict_validation=True)
+if result.success:
+    print(result.mnemonic)
+else:
+    print(result.errors)
 ```
 
 ---
@@ -97,7 +92,7 @@ Key documents:
 
 ### Sister Implementation
 
-For immediate use, see the JavaScript library:
+The JavaScript library is the primary implementation for end users:
 
 🔗 **[JavaScript Library](https://github.com/GRIFORTIS/schiavinato-sharing-js)**
 
@@ -148,17 +143,11 @@ schiavinato-sharing-py/
 │   ├── split.py              # Mnemonic splitting
 │   ├── recover.py            # Mnemonic recovery
 │   ├── checksums.py          # Checksum generation/validation
-│   └── utils/
-│       ├── __init__.py
-│       ├── validation.py     # Input validation
-│       └── security.py       # Security utilities
+│   ├── security.py           # Constant-time comparisons + best-effort wiping
+│   ├── seed.py               # Mnemonic helpers + native BIP39 checksum validation
+│   └── types.py              # Dataclasses and typed error shape
 ├── tests/
-│   ├── test_field.py
-│   ├── test_polynomial.py
 │   └── ...
-├── examples/
-│   └── basic_usage.py
-├── setup.py
 ├── pyproject.toml
 └── README.md
 ```
@@ -189,12 +178,11 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 
 ## 🔒 Security
 
-### Security Status: ⚠️ EXPERIMENTAL (Not Yet Implemented)
+### Security Status: ⚠️ EXPERIMENTAL (Not Audited)
 
-When this library is released, it will be **experimental software** that has NOT been professionally audited.
+This library is **experimental software** that has NOT been professionally audited.
 
 **DO NOT USE FOR REAL FUNDS** until:
-- [ ] Implementation complete
 - [ ] Professional security audit
 - [ ] Extensive peer review
 - [ ] v1.0.0 release
@@ -212,7 +200,7 @@ See [SECURITY.md](.github/SECURITY.md) for reporting vulnerabilities.
 ## 🔗 Related Projects
 
 - **[Specification](https://github.com/GRIFORTIS/schiavinato-sharing-spec)** – Whitepaper and reference implementation
-- **[JavaScript Library](https://github.com/GRIFORTIS/schiavinato-sharing-js)** – Production-ready npm package
+- **[JavaScript Library](https://github.com/GRIFORTIS/schiavinato-sharing-js)** – Primary npm library implementation
 - **[GRIFORTIS](https://github.com/GRIFORTIS)** – Organization homepage
 
 ---

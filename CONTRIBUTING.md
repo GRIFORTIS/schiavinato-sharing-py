@@ -4,7 +4,9 @@ Thank you for your interest in contributing to the Python implementation of Schi
 
 ## 📋 Current Status
 
-**This project is in early development.** We're building the Python library from scratch based on the [Schiavinato Sharing specification](https://github.com/GRIFORTIS/schiavinato-sharing-spec).
+**This project is implemented and tested (v0.4.0), but still experimental.**
+
+Development goal: maintain parity with the canonical specification + reference implementation while keeping the library safe for manual-first workflows.
 
 ### Zero-Knowledge Protocol
 
@@ -56,23 +58,23 @@ Before implementing, review:
 ### Implementation Roadmap
 
 Phase 1: Core Cryptography
-- [ ] `field.py` – GF(2053) field arithmetic
-- [ ] `polynomial.py` – Polynomial operations
-- [ ] `lagrange.py` – Lagrange interpolation
+- [x] `field.py` – GF(2053) field arithmetic
+- [x] `polynomial.py` – Polynomial operations
+- [x] `lagrange.py` – Lagrange interpolation
 
 Phase 2: Schiavinato Logic
-- [ ] `split.py` – Mnemonic splitting
-- [ ] `recover.py` – Mnemonic recovery
-- [ ] `checksums.py` – Checksum generation/validation
+- [x] `split.py` – Mnemonic splitting
+- [x] `recover.py` – Mnemonic recovery
+- [x] `checksums.py` – Checksum generation/validation
 
 Phase 3: Utilities
-- [ ] `validation.py` – Input validation
-- [ ] `security.py` – Security utilities
+- [x] `security.py` – Security utilities
+- [x] `seed.py` – Mnemonic helpers and native BIP39 checksum validation
 
 Phase 4: Testing & Documentation
-- [ ] Comprehensive test suite
-- [ ] Documentation and examples
-- [ ] Performance benchmarks
+- [x] Comprehensive test suite
+- [ ] Documentation polish (README/API docs)
+- [ ] Performance benchmarks (optional)
 
 ## 🧪 Testing
 
@@ -124,25 +126,24 @@ from typing import List
 
 def split_mnemonic(
     mnemonic: str,
-    threshold: int,
-    total_shares: int
-) -> List[str]:
+    k: int,
+    n: int
+) -> List["Share"]:
     """
     Split a BIP39 mnemonic into shares.
     
     Args:
         mnemonic: Valid BIP39 mnemonic phrase
-        threshold: Minimum shares needed for recovery (k)
-        total_shares: Total shares to generate (n)
+        k: Minimum shares needed for recovery (threshold)
+        n: Total shares to generate
         
     Returns:
-        List of share strings
+        List of Share objects
         
     Raises:
         ValueError: If inputs are invalid
     """
-    # Implementation
-    pass
+    ...
 ```
 
 ### Docstrings

@@ -1,21 +1,21 @@
 # Security Policy
 
-## Status: Not Yet Implemented
+## Status: Experimental (v0.4.0)
 
-**This library is currently under development and has no functional code yet.**
+**This library is functional but experimental and not professionally audited.**
 
-Once implemented, it will follow the same security guidelines as our other projects.
+Do not use for real funds unless you have reviewed the code and understand the risks.
 
 ## Reporting Vulnerabilities
 
-If you discover security issues once the library is implemented:
+If you discover a security issue:
 
 - **Email**: security@grifortis.com
 - **GitHub Security Advisory**: Use the "Security" tab
 
 ## Future Security Status
 
-When released, this will be **experimental software** requiring:
+This project is **experimental software** requiring:
 - Professional security audit
 - Peer review
 - Extensive testing
@@ -24,5 +24,5 @@ When released, this will be **experimental software** requiring:
 
 ---
 
-*Last updated: November 25, 2025*
+*Last updated: January 29, 2026*
 

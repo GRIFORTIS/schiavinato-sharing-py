@@ -7,42 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.5.0] - 2025-12-12
+## [0.4.0] - 2026-01-29
 
-### Changed - BREAKING
-- **BIP39 indexing is now 1-based (1-2048) instead of 0-based (0-2047)**
-  - "abandon" is now index 0001 (was 0000)
-  - "zoo" is now index 2048 (was 2047)
-  - This aligns with human-centric design: people naturally count from 1, not 0
-  - All APIs, error messages, and test vectors updated
-  
-### Changed - Share Display Format
-- Share values now use dual-reference format for clarity:
-  - Value 0: displayed as "0000-0000"
-  - Values 1-2048: displayed as "[bip39word]-[4-digit-index]" (e.g., "abandon-0001", "zoo-2048")
-  - Values 2049-2052: displayed as "2049-2049", "2050-2050", etc. (GF(2053) overflow values)
-  
-### Technical Details
-- **Internal computation unchanged**: GF(2053) arithmetic still operates on field elements 0-2052
-- **Only user-facing changes**: BIP39 word-to-index and index-to-word conversions adjusted (+1/-1)
-- **Conversion functions updated**:
-  - `mnemonic_to_indices()`: Returns 1-based indices (was 0-based)
-  - `indices_to_mnemonic()`: Accepts 1-based indices (was 0-based)
-  - `parse_input()`: Handles 1-2048 range for numeric input
-- **Test vectors regenerated**: All test data updated with new indices
-- **Error messages updated**: Range validation now shows "1-2048" instead of "0-2047"
+### Versioning Note (Alignment)
+- This repository is aligned to **v0.4.0** to match the specification + whitepaper release.
+- Previously documented changes under a draft **v0.5.0** have been **merged into v0.4.0** to keep a single cross-repo version.
 
-### Migration Guide
-- **If you have existing shares**: They are now invalid. This is a breaking change - regenerate all shares with v0.5.0
-- **If you use the library**: Update to v0.5.0 and regenerate shares
-- **API changes**: 
-  - Functions that return indices now return 1-2048 (was 0-2047)
-  - Functions that accept indices now expect 1-2048 (was 0-2047)
-  
-### Why This Change?
-Schiavinato Sharing prioritizes human-centricity over computational convenience. While 0-based indexing is efficient for computers, the difference is negligible (a single add/subtract operation). The usability benefit of 1-based indexing for humans performing manual calculations is significant. "Word 1" being "abandon" with index 0001 is intuitive; explaining that "Word 1" has index 0000 creates unnecessary cognitive load, especially in inheritance scenarios where non-technical users must execute the scheme years after creation.
+### Indexing Policy (CRITICAL)
+- **BIP39-native indexing remains 0-based** (wordlist positions \(0..2047\)).
+- **Schiavinato Sharing math is 1-based** (word indices \(1..2048\)) and is what is used as secrets in GF(2053).
+- Any \(+1/-1\) conversion is allowed **only** at the BIP39 <-> Schiavinato boundary (wordlist position <-> Schiavinato word index).
 
-## [0.4.0] - 2025-12-09
+### Changed - Share Display Format (merged)
+- Share values use dual-reference format for clarity:
+  - Value 0: displayed as `0000-0000`
+  - Values 1-2048: displayed as `####-word` / `word-####` (implementation-specific presentation)
+  - Values 2049-2052: displayed as `2049-2049`, `2050-2050`, etc. (GF(2053) overflow values)
 
 ### Added
 - Dual-path checksum validation (Path A sums vs Path B polynomials) during split and recovery
@@ -51,6 +31,7 @@ Schiavinato Sharing prioritizes human-centricity over computational convenience.
 - Configurable randomness source for deterministic/testing scenarios
 - Mnemonic/seed helpers (`generate_valid_mnemonic`, `mnemonic_to_indices`, `indices_to_mnemonic`, `parse_input`)
 - **GIC Binding**: Global Integrity Check is now bound to share number `x` (printed GIC = sum + x mod 2053)
+- Native BIP39 checksum validation with constant-time checksum-bit comparison (canonical HTML parity)
 
 ### Changed
 - Recovery reports now surface `rowPathMismatch` and `globalPathMismatch` for checksum path disagreements
@@ -58,6 +39,10 @@ Schiavinato Sharing prioritizes human-centricity over computational convenience.
 - **Terminology standardization**: "Global Checksum" renamed to "Global Integrity Check (GIC)" across all code, tests, and documentation
 - Property name: `global_checksum_verification_share` → `global_integrity_check_share` (breaking change)
 - Function name: `compute_global_checksum()` → `compute_global_integrity_check()` (breaking change)
+
+### Fixed
+- Reject invalid share numbers during recovery (must be integer \(1..2052\); no silent modulo wraparound)
+- Mnemonic sanitization now lowercases input before validation/splitting (canonical HTML parity)
 
 ### Tests/Docs
 - Added dual-path checksum mismatch tests and random-source coverage
