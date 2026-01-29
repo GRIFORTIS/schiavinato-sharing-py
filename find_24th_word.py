@@ -1,6 +1,9 @@
 from mnemonic import Mnemonic
 
-mnemonic_phrase = "abandon zoo enhance young join maximum fancy call minimum code spider olive toilet system also share birth profit horn bargain beauty media rapid"
+mnemonic_phrase = (
+    "abandon zoo enhance young join maximum fancy call minimum code spider olive "
+    "toilet system also share birth profit horn bargain beauty media rapid"
+)
 words = mnemonic_phrase.split()
 
 mnemo = Mnemonic("english")
@@ -18,8 +21,3 @@ if found_24th_word:
     print(f"A 24ª palavra BIP39 válida é: {found_24th_word}")
 else:
     print("Não foi possível encontrar uma 24ª palavra válida para as 23 palavras fornecidas.")
-
-
-
-
-

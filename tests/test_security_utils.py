@@ -6,6 +6,7 @@ branching on secret data). Empirical timing tests are unreliable due to Python
 interpreter overhead, OS scheduling, and GC. This matches Bitcoin Core's approach:
 constant-time by construction, verified through code review.
 """
+
 from schiavinato_sharing.security import (
     constant_time_equal,
     constant_time_string_equal,

@@ -19,4 +19,3 @@ def test_license_exists():
     """Test that license is defined."""
     assert hasattr(schiavinato_sharing, "__license__")
     assert schiavinato_sharing.__license__ == "MIT"
-

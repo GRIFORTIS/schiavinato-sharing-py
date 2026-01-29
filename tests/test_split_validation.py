@@ -1,7 +1,6 @@
 import pytest
 
-from schiavinato_sharing import split_mnemonic, FIELD_PRIME
-
+from schiavinato_sharing import FIELD_PRIME, split_mnemonic
 
 VALID_MNEMONIC = (
     "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about"

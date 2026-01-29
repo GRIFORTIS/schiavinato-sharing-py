@@ -1,15 +1,12 @@
-import pytest
-
 from schiavinato_sharing import (
-    split_mnemonic,
-    recover_mnemonic,
     configure_random_source,
-    get_random_field_element,
     generate_valid_mnemonic,
-    mnemonic_to_indices,
+    get_random_field_element,
     indices_to_mnemonic,
+    mnemonic_to_indices,
+    recover_mnemonic,
+    split_mnemonic,
 )
-
 
 TEST_MNEMONIC = "spin result brand ahead poet carpet unusual chronic denial festival toy autumn"
 
@@ -28,9 +25,7 @@ def test_row_checksum_path_mismatch_detected():
 
 def test_global_integrity_check_path_mismatch_detected():
     shares = split_mnemonic(TEST_MNEMONIC, 2, 3)
-    shares[0].global_integrity_check_share = (
-        shares[0].global_integrity_check_share + 1
-    ) % 2053
+    shares[0].global_integrity_check_share = (shares[0].global_integrity_check_share + 1) % 2053
 
     result = recover_mnemonic([shares[0], shares[1]], 12)
 
@@ -91,4 +86,3 @@ def test_word_share_tampering_triggers_path_mismatch():
     assert result.success is False
     assert 0 in result.errors["row"]
     assert 0 in result.errors["rowPathMismatch"]
-

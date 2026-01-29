@@ -6,11 +6,14 @@ BIP39 mnemonic phrases using arithmetic in GF(2053).
 
 Basic usage:
     >>> from schiavinato_sharing import split_mnemonic, recover_mnemonic
-    >>> 
+    >>>
     >>> # Split a mnemonic
-    >>> mnemonic = "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about"
+    >>> mnemonic = (
+    ...     "abandon abandon abandon abandon abandon abandon abandon abandon "
+    ...     "abandon abandon abandon about"
+    ... )
     >>> shares = split_mnemonic(mnemonic, threshold=2, total_shares=3)
-    >>> 
+    >>>
     >>> # Recover the mnemonic
     >>> result = recover_mnemonic(shares[:2], word_count=12)
     >>> if result.success:
@@ -25,45 +28,40 @@ __author__ = "GRIFORTIS"
 __license__ = "MIT"
 
 # Export main API functions
-from .split import split_mnemonic
-from .recover import recover_mnemonic
+# Export checksum functions (for verification)
+from .checksums import (
+    WORDS_PER_ROW,
+    compute_global_check_polynomial,
+    compute_global_integrity_check,
+    compute_row_check_polynomials,
+    compute_row_checks,
+    sum_polynomials,
+)
 
 # Export field arithmetic (for advanced use)
 from .field import (
     FIELD_PRIME,
+    GF2053,
     mod,
     mod_add,
-    mod_sub,
-    mod_mul,
-    mod_inv,
     mod_div,
+    mod_inv,
+    mod_mul,
     mod_pow,
-    GF2053,
+    mod_sub,
 )
 
 # Export Lagrange functions (for manual recovery)
-from .lagrange import (
-    compute_lagrange_multipliers,
-    lagrange_interpolate_at_zero
-)
+from .lagrange import compute_lagrange_multipliers, lagrange_interpolate_at_zero
 
 # Export polynomial functions (for testing/verification)
 from .polynomial import (
-    random_polynomial,
+    configure_random_source,
     evaluate_polynomial,
     get_random_field_element,
-    configure_random_source,
+    random_polynomial,
 )
-
-# Export checksum functions (for verification)
-from .checksums import (
-    compute_row_checks,
-    compute_global_integrity_check,
-    compute_row_check_polynomials,
-    compute_global_check_polynomial,
-    sum_polynomials,
-    WORDS_PER_ROW,
-)
+from .recover import recover_mnemonic
 
 # Security utilities
 from .security import (
@@ -76,16 +74,14 @@ from .security import (
 # Mnemonic/seed helpers
 from .seed import (
     generate_valid_mnemonic,
-    mnemonic_to_indices,
     indices_to_mnemonic,
+    mnemonic_to_indices,
     parse_input,
 )
+from .split import split_mnemonic
 
 # Export types
-from .types import (
-    Share,
-    RecoveryResult
-)
+from .types import RecoveryResult, Share
 
 __all__ = [
     # Main API
@@ -132,5 +128,5 @@ __all__ = [
     # Metadata
     "__version__",
     "__author__",
-    "__license__"
+    "__license__",
 ]

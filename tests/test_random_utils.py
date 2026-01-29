@@ -2,7 +2,7 @@ import secrets
 
 import pytest
 
-from schiavinato_sharing import configure_random_source, get_random_field_element, FIELD_PRIME
+from schiavinato_sharing import FIELD_PRIME, configure_random_source, get_random_field_element
 
 
 def test_configure_random_source_rejects_bad_provider():
