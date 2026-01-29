@@ -1,10 +1,8 @@
-from schiavinato_sharing import split_mnemonic, WORDS_PER_ROW, mod_add
+from schiavinato_sharing import WORDS_PER_ROW, mod_add, split_mnemonic
 
 
 def test_split_checksums_self_consistent():
-    mnemonic = (
-        "spin result brand ahead poet carpet unusual chronic denial festival toy autumn"
-    )
+    mnemonic = "spin result brand ahead poet carpet unusual chronic denial festival toy autumn"
     shares = split_mnemonic(mnemonic, 2, 3)
 
     for share in shares:

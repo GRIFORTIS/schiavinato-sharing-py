@@ -5,13 +5,15 @@ This module implements the share recovery (reconstruction) logic for
 Schiavinato Sharing over GF(2053).
 """
 
-from typing import List, Optional
+from typing import Optional
+
 from mnemonic import Mnemonic
-from .field import mod, FIELD_PRIME
+
+from .checksums import WORDS_PER_ROW, compute_global_integrity_check, compute_row_checks
+from .field import FIELD_PRIME, mod
 from .lagrange import lagrange_interpolate_at_zero
-from .checksums import compute_row_checks, compute_global_integrity_check, WORDS_PER_ROW
 from .security import constant_time_equal, secure_wipe_list, secure_wipe_number
-from .types import Share, RecoveryResult
+from .types import RecoveryResult, Share
 
 
 def _normalize_share_value(value: int, label: str) -> int:
@@ -23,18 +25,18 @@ def _normalize_share_value(value: int, label: str) -> int:
 
 
 def recover_mnemonic(
-    shares: List[Share],
+    shares: list[Share],
     word_count: int,
-    wordlist: Optional[List[str]] = None,
-    strict_validation: bool = True
+    wordlist: Optional[list[str]] = None,
+    strict_validation: bool = True,
 ) -> RecoveryResult:
     """
     Performs unified recovery and validation of a mnemonic from shares.
-    
+
     This function does not raise exceptions on validation failures; instead, it returns
     a detailed report object containing the recovered mnemonic (if successful)
     and a breakdown of any errors encountered.
-    
+
     Recovery process:
     1. Validates share structure and uniqueness
     2. Uses Lagrange interpolation to recover word indices
@@ -42,16 +44,16 @@ def recover_mnemonic(
     4. Validates row checksums
     5. Validates Global Integrity Check (GIC)
     6. Validates BIP39 checksum (if previous checks pass)
-    
+
     Args:
         shares: List of share objects (minimum 2, typically k shares)
         word_count: Expected word count of original mnemonic (12 or 24)
         wordlist: Optional custom wordlist (defaults to English)
         strict_validation: If True, strictly validate BIP39 checksum (default: True)
-    
+
     Returns:
         Recovery report with mnemonic and error details
-    
+
     Examples:
         >>> result = recover_mnemonic(shares[:2], 12)
         >>> if result.success:
@@ -60,31 +62,31 @@ def recover_mnemonic(
         ...     print('Errors:', result.errors)
     """
     # Initialize mnemonic helper
-    mnemo = Mnemonic('english')
+    mnemo = Mnemonic("english")
     if wordlist is None:
         wordlist = mnemo.wordlist
-    
+
     report = RecoveryResult()
     report.errors["rowPathMismatch"] = []
     report.errors["globalPathMismatch"] = False
-    recovered_words: List[int] = []
-    recovered_checks: List[int] = []
+    recovered_words: list[int] = []
+    recovered_checks: list[int] = []
     recovered_global_integrity_check: int = 0
-    
+
     try:
         # 1. Pre-flight checks for input validity
         if not shares or len(shares) < 2:
-            report.errors['generic'] = 'At least two shares are required for recovery.'
+            report.errors["generic"] = "At least two shares are required for recovery."
             return report
-        
+
         if word_count not in [12, 24]:
-            report.errors['generic'] = f'Unsupported word count: {word_count}. Must be 12 or 24.'
+            report.errors["generic"] = f"Unsupported word count: {word_count}. Must be 12 or 24."
             return report
-        
+
         if word_count % WORDS_PER_ROW != 0:
-            report.errors['generic'] = 'Word count must be divisible by 3.'
+            report.errors["generic"] = "Word count must be divisible by 3."
             return report
-        
+
         # Validate share structure and distinctness
         row_count = word_count // WORDS_PER_ROW
         share_numbers = []
@@ -112,7 +114,7 @@ def recover_mnemonic(
         if len(share_numbers) != len(set(share_numbers)):
             report.errors["generic"] = "Share numbers must be unique."
             return report
-        
+
         # 2. Recover all secret numbers via Lagrange Interpolation
         for i in range(word_count):
             points = [
@@ -150,7 +152,9 @@ def recover_mnemonic(
             )
             for share in shares
         ]
-        recovered_global_integrity_check = lagrange_interpolate_at_zero(global_integrity_check_points)
+        recovered_global_integrity_check = lagrange_interpolate_at_zero(
+            global_integrity_check_points
+        )
 
         # 3. Perform internal Schiavinato validations with dual-path checking
         recomputed_checks = compute_row_checks(recovered_words)
@@ -162,41 +166,43 @@ def recover_mnemonic(
 
         recomputed_global_integrity_check = compute_global_integrity_check(recovered_words)
 
-        if not constant_time_equal(recovered_global_integrity_check, recomputed_global_integrity_check):
+        if not constant_time_equal(
+            recovered_global_integrity_check, recomputed_global_integrity_check
+        ):
             report.errors["globalPathMismatch"] = True
             report.errors["global"] = True
-        
+
         # 4. Convert indices to words (1-based to 0-based array index)
         try:
             # Check if indices are in valid BIP39 range (1-2048)
             for i, idx in enumerate(recovered_words):
                 if idx < 1 or idx > 2048:
-                    report.errors['generic'] = (
+                    report.errors["generic"] = (
                         f'Recovered word #{i + 1} ("{idx}") is outside the BIP39 range (1–2048). '
-                        f'Cannot form a valid mnemonic.'
+                        f"Cannot form a valid mnemonic."
                     )
                     return report
-            
+
             # Convert from 1-based BIP39 indices to 0-based array indices
             recovered_word_list = [wordlist[idx - 1] for idx in recovered_words]
-            recovered_mnemonic = ' '.join(recovered_word_list)
+            recovered_mnemonic = " ".join(recovered_word_list)
         except IndexError as e:
-            report.errors['generic'] = f'Invalid word index recovered: {e}'
+            report.errors["generic"] = f"Invalid word index recovered: {e}"
             return report
-        
+
         # 5. BIP39 checksum validation
         if strict_validation:
             if not mnemo.check(recovered_mnemonic):
-                report.errors['bip39'] = True
-        
+                report.errors["bip39"] = True
+
         # 6. Determine success
         has_errors = (
-            len(report.errors['row']) > 0 or
-            report.errors['global'] or
-            report.errors['bip39'] or
-            report.errors['generic'] is not None
+            len(report.errors["row"]) > 0
+            or report.errors["global"]
+            or report.errors["bip39"]
+            or report.errors["generic"] is not None
         )
-        
+
         if not has_errors:
             report.mnemonic = recovered_mnemonic
             report.success = True
@@ -207,10 +213,9 @@ def recover_mnemonic(
         return report
 
     except Exception as e:
-        report.errors['generic'] = f'Unexpected error during recovery: {str(e)}'
+        report.errors["generic"] = f"Unexpected error during recovery: {str(e)}"
         return report
     finally:
         secure_wipe_list(recovered_words)
         secure_wipe_list(recovered_checks)
         recovered_global_integrity_check = secure_wipe_number(recovered_global_integrity_check)
-

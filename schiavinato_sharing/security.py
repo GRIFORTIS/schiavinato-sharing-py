@@ -19,8 +19,6 @@ properties empirically. Interpreter overhead, OS scheduling, and GC introduce
 noise that exceeds typical timing differences from side-channel vulnerabilities.
 """
 
-from typing import Iterable
-
 
 def constant_time_equal(a: int, b: int) -> bool:
     """Constant-time equality for integers."""
@@ -39,7 +37,7 @@ def constant_time_string_equal(a: str, b: str) -> bool:
     return diff == 0
 
 
-def secure_wipe_list(values: list) -> None:
+def secure_wipe_list(values: list[int]) -> None:
     """Overwrite list contents with zeros."""
     for i in range(len(values)):
         values[i] = 0

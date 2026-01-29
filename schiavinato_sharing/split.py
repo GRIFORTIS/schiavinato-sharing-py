@@ -5,33 +5,35 @@ This module implements the share generation (splitting) logic for
 Schiavinato Sharing over GF(2053).
 """
 
-from typing import List, Optional
+from typing import Optional
+
 from mnemonic import Mnemonic
-from .field import FIELD_PRIME, mod_add
-from .polynomial import random_polynomial, evaluate_polynomial
+
 from .checksums import (
-    compute_row_check_polynomials,
-    compute_global_check_polynomial,
     WORDS_PER_ROW,
+    compute_global_check_polynomial,
+    compute_row_check_polynomials,
 )
+from .field import FIELD_PRIME, mod_add
+from .polynomial import evaluate_polynomial, random_polynomial
 from .security import secure_wipe_list
 from .types import Share
 
 
 def sanitize_mnemonic(mnemonic: str) -> str:
     """Normalize mnemonic by trimming and collapsing whitespace."""
-    return ' '.join(mnemonic.split())
+    return " ".join(mnemonic.split())
 
 
 def split_mnemonic(
     mnemonic: str,
     k: int,
     n: int,
-    wordlist: Optional[List[str]] = None
-) -> List[Share]:
+    wordlist: Optional[list[str]] = None,
+) -> list[Share]:
     """
     Splits a BIP39 mnemonic into n Shamir shares with threshold k.
-    
+
     Implements the Schiavinato Sharing scheme (v0.5.0):
     1. Validates the BIP39 mnemonic
     2. Converts words to indices (1-2048, 1-based BIP39 indexing)
@@ -40,32 +42,33 @@ def split_mnemonic(
     5. Computes checksum shares using dual-path validation:
        - Path A: Sum of word shares (mod 2053) - direct computation
        - Path B: Polynomial-based - sum polynomial coefficients, then evaluate
-    
+
     v0.4.0 Change: Implements dual-path checksum validation to detect bit flips
     and hardware faults. Checksum polynomials are created by summing word polynomial
     coefficients, then evaluated at each share point. Both paths must agree, providing
     redundant validation that catches corruption during share generation.
-    
+
     v0.3.0 Change: Checksum shares are now computed deterministically during share
     generation, enabling integrity validation during manual splitting. Row checksum
     share = sum of 3 word shares in that row. Global Integrity Check (GIC) share = sum of all
     word shares. This maintains all LSSS security properties while adding verifiability.
-    
+
     Args:
         mnemonic: The BIP39 mnemonic phrase to split
         k: Threshold: number of shares required for recovery (minimum 2)
         n: Total number of shares to generate
         wordlist: Optional custom wordlist (defaults to English)
-    
+
     Returns:
         List of n share objects
-    
+
     Raises:
         ValueError: If inputs are invalid or mnemonic fails validation
-    
+
     Examples:
         >>> shares = split_mnemonic(
-        ...     'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about',
+        ...     'abandon abandon abandon abandon abandon abandon abandon abandon '
+        ...     'abandon abandon abandon about',
         ...     2,  # 2-of-n
         ...     3   # 3 total shares
         ... )
@@ -76,36 +79,36 @@ def split_mnemonic(
     """
     # Validate parameters
     if not isinstance(k, int) or not isinstance(n, int):
-        raise ValueError('Threshold (k) and total shares (n) must be integers.')
-    
+        raise ValueError("Threshold (k) and total shares (n) must be integers.")
+
     if k < 2:
-        raise ValueError('Threshold k must be at least 2.')
-    
+        raise ValueError("Threshold k must be at least 2.")
+
     if k > n:
-        raise ValueError('Threshold k cannot exceed n.')
-    
+        raise ValueError("Threshold k cannot exceed n.")
+
     if n >= FIELD_PRIME:
-        raise ValueError('Total shares (n) must be less than 2053.')
-    
+        raise ValueError("Total shares (n) must be less than 2053.")
+
     # Normalize and validate mnemonic
     normalized_mnemonic = sanitize_mnemonic(mnemonic)
-    
+
     # Use mnemonic library for validation
-    mnemo = Mnemonic('english')
+    mnemo = Mnemonic("english")
     if not mnemo.check(normalized_mnemonic):
-        raise ValueError('Invalid BIP39 mnemonic: checksum verification failed.')
-    
+        raise ValueError("Invalid BIP39 mnemonic: checksum verification failed.")
+
     # Split into words
-    words = normalized_mnemonic.split(' ')
+    words = normalized_mnemonic.split(" ")
     word_count = len(words)
-    
+
     if word_count not in [12, 24]:
-        raise ValueError(f'Unsupported word count: {word_count}. Must be 12 or 24.')
-    
+        raise ValueError(f"Unsupported word count: {word_count}. Must be 12 or 24.")
+
     # Get wordlist
     if wordlist is None:
         wordlist = mnemo.wordlist
-    
+
     # Convert words to indices (1-based BIP39 indices)
     word_indices = []
     for word in words:
@@ -113,9 +116,9 @@ def split_mnemonic(
             index = wordlist.index(word)
             # Convert from 0-based array index to 1-based BIP39 index
             word_indices.append(index + 1)
-        except ValueError:
-            raise ValueError(f'Unknown mnemonic word: "{word}".')
-    
+        except ValueError as err:
+            raise ValueError(f'Unknown mnemonic word: "{word}".') from err
+
     # Create polynomials (degree = k - 1)
     degree = k - 1
 
@@ -124,13 +127,13 @@ def split_mnemonic(
     # v0.4.0 Path B: checksum polynomials derived from word polynomials
     row_check_polynomials = compute_row_check_polynomials(word_polynomials)
     global_check_polynomial = compute_global_check_polynomial(word_polynomials)
-    
+
     # Generate shares by evaluating polynomials at x = 1, 2, ..., n
     shares = []
-    
+
     for share_index in range(1, n + 1):
         word_shares = [evaluate_polynomial(poly, share_index) for poly in word_polynomials]
-        
+
         # v0.4.0 Dual-path checksum computation
         # Path A: direct sum of word shares
         # Path B: evaluate checksum polynomials; both must agree
@@ -144,9 +147,7 @@ def split_mnemonic(
                 mod_add(word_shares[base], word_shares[base + 1]),
                 word_shares[base + 2],
             )
-            checksum_path_b = evaluate_polynomial(
-                row_check_polynomials[row], share_index
-            )
+            checksum_path_b = evaluate_polynomial(row_check_polynomials[row], share_index)
 
             if checksum_path_a != checksum_path_b:
                 raise ValueError(
@@ -165,20 +166,21 @@ def split_mnemonic(
         if global_integrity_check_share_path_a != global_integrity_check_share_path_b:
             raise ValueError(
                 f"Global Integrity Check (GIC) path mismatch at share {share_index}: "
-                f"Path A={global_integrity_check_share_path_a}, Path B={global_integrity_check_share_path_b}"
+                f"Path A={global_integrity_check_share_path_a}, "
+                f"Path B={global_integrity_check_share_path_b}"
             )
-        
+
         # Bind GIC to share number (ensures share number is embedded in validation)
         bound_gic = (global_integrity_check_share_path_a + share_index) % FIELD_PRIME
-        
+
         share = Share(
             share_number=share_index,
             word_shares=word_shares,
             checksum_shares=checksum_shares_list,
-            global_integrity_check_share=bound_gic
+            global_integrity_check_share=bound_gic,
         )
         shares.append(share)
-    
+
     # Best-effort wipe sensitive data
     secure_wipe_list(word_indices)
     for poly in word_polynomials:
@@ -188,4 +190,3 @@ def split_mnemonic(
     secure_wipe_list(global_check_polynomial)
 
     return shares
-

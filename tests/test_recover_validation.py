@@ -1,8 +1,5 @@
-import pytest
-
-from schiavinato_sharing import recover_mnemonic, split_mnemonic, FIELD_PRIME
+from schiavinato_sharing import FIELD_PRIME, recover_mnemonic, split_mnemonic
 from schiavinato_sharing.types import Share
-
 
 VALID_MNEMONIC = (
     "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about"
@@ -17,31 +14,54 @@ def test_recover_rejects_unsupported_wordcount():
 
 
 def test_recover_rejects_wrong_wordshare_length():
-    share1 = Share(share_number=1, word_shares=[1, 2], checksum_shares=[3, 4], global_integrity_check_share=0)
-    share2 = Share(share_number=2, word_shares=[1, 2], checksum_shares=[3, 4], global_integrity_check_share=0)
+    share1 = Share(
+        share_number=1, word_shares=[1, 2], checksum_shares=[3, 4], global_integrity_check_share=0
+    )
+    share2 = Share(
+        share_number=2, word_shares=[1, 2], checksum_shares=[3, 4], global_integrity_check_share=0
+    )
     result = recover_mnemonic([share1, share2], 12)
     assert result.success is False
     assert "word shares" in result.errors["generic"]
 
 
 def test_recover_rejects_wrong_checksum_length():
-    share1 = Share(share_number=1, word_shares=[0] * 12, checksum_shares=[1], global_integrity_check_share=0)
-    share2 = Share(share_number=2, word_shares=[0] * 12, checksum_shares=[1], global_integrity_check_share=0)
+    share1 = Share(
+        share_number=1, word_shares=[0] * 12, checksum_shares=[1], global_integrity_check_share=0
+    )
+    share2 = Share(
+        share_number=2, word_shares=[0] * 12, checksum_shares=[1], global_integrity_check_share=0
+    )
     result = recover_mnemonic([share1, share2], 12)
     assert result.success is False
     assert "checksum shares" in result.errors["generic"]
 
 
 def test_recover_rejects_duplicate_share_numbers():
-    share = Share(share_number=1, word_shares=[0] * 12, checksum_shares=[0, 0, 0, 0], global_integrity_check_share=0)
+    share = Share(
+        share_number=1,
+        word_shares=[0] * 12,
+        checksum_shares=[0, 0, 0, 0],
+        global_integrity_check_share=0,
+    )
     result = recover_mnemonic([share, share], 12)
     assert result.success is False
     assert "unique" in result.errors["generic"].lower()
 
 
 def test_recover_rejects_out_of_range_share_value():
-    share1 = Share(share_number=1, word_shares=[FIELD_PRIME] + [0] * 11, checksum_shares=[0, 0, 0, 0], global_integrity_check_share=0)
-    share2 = Share(share_number=2, word_shares=[0] * 12, checksum_shares=[0, 0, 0, 0], global_integrity_check_share=0)
+    share1 = Share(
+        share_number=1,
+        word_shares=[FIELD_PRIME] + [0] * 11,
+        checksum_shares=[0, 0, 0, 0],
+        global_integrity_check_share=0,
+    )
+    share2 = Share(
+        share_number=2,
+        word_shares=[0] * 12,
+        checksum_shares=[0, 0, 0, 0],
+        global_integrity_check_share=0,
+    )
     result = recover_mnemonic([share1, share2], 12)
     assert result.success is False
     assert "between 0 and" in result.errors["generic"]

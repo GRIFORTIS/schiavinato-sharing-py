@@ -4,14 +4,14 @@ from schiavinato_sharing.field import (
     FIELD_PRIME,
     mod,
     mod_add,
-    mod_sub,
-    mod_mul,
     mod_div,
     mod_inv,
+    mod_mul,
+    mod_sub,
 )
 from schiavinato_sharing.lagrange import (
-    lagrange_interpolate_at_zero,
     compute_lagrange_multipliers,
+    lagrange_interpolate_at_zero,
 )
 
 
