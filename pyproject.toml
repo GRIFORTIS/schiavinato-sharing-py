@@ -52,7 +52,7 @@ dev = [
     "mypy==1.19.1",
     "black==24.10.0",
     "ruff==0.14.14",
-    "isort==7.0.0",
+    "isort==5.13.2",
 ]
 
 [project.urls]
