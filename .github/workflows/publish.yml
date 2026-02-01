@@ -22,6 +22,46 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Preflight tag/version alignment
+        env:
+          TAG_NAME: ${{ github.event.release.tag_name }}
+        run: |
+          set -euo pipefail
+          echo "Release tag: ${TAG_NAME}"
+          echo "Checked out SHA: $(git rev-parse HEAD)"
+          python - <<'PY'
+          import os
+          import re
+          import sys
+          from pathlib import Path
+          import tomllib
+          
+          tag = os.environ["TAG_NAME"]
+          if not re.fullmatch(r"v\\d+\\.\\d+\\.\\d+", tag):
+              raise SystemExit(f"Invalid release tag format: {tag!r} (expected vX.Y.Z)")
+          
+          pyproject = tomllib.loads(Path("pyproject.toml").read_text(encoding="utf-8"))
+          version = pyproject.get("project", {}).get("version")
+          if not isinstance(version, str) or not version:
+              raise SystemExit("pyproject.toml missing [project].version")
+          
+          expected_tag = f"v{version}"
+          if tag != expected_tag:
+              raise SystemExit(
+                  f"Tag/version mismatch: tag={tag!r} but pyproject.toml version={version!r}"
+              )
+          
+          import schiavinato_sharing  # noqa: E402
+          
+          if getattr(schiavinato_sharing, "__version__", None) != version:
+              raise SystemExit(
+                  f"__version__ mismatch: schiavinato_sharing.__version__={schiavinato_sharing.__version__!r} "
+                  f"but pyproject.toml version={version!r}"
+              )
+          
+          print(f"OK: tag={tag} version={version} __version__={schiavinato_sharing.__version__}")
+          PY
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip

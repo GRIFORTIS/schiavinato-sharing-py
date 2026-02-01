@@ -4,7 +4,7 @@ Thank you for your interest in contributing to the Python implementation of Schi
 
 ## 📋 Current Status
 
-**This project is implemented and tested (v0.4.0), but still experimental.**
+**This project is implemented and tested (v0.4.1), but still experimental.**
 
 Development goal: maintain parity with the canonical specification + reference implementation while keeping the library safe for manual-first workflows.
 

@@ -8,10 +8,9 @@ Indexing policy:
 """
 
 import hashlib
+import hmac
 
 from mnemonic import Mnemonic
-
-from .security import constant_time_string_equal
 
 
 def generate_valid_mnemonic(word_count: int) -> str:
@@ -147,4 +146,5 @@ def validate_bip39_mnemonic(mnemonic: str, wordlist: list[str] | None = None) ->
     hash_binary = "".join(f"{b:08b}" for b in hash_bytes)
     derived_checksum = hash_binary[:checksum_length]
 
-    return constant_time_string_equal(derived_checksum, checksum_binary)
+    # Constant-time compare of checksum bits (string-safe, same length by construction).
+    return hmac.compare_digest(derived_checksum, checksum_binary)

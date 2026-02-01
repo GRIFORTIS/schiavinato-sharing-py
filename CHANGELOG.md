@@ -7,11 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-02-01
+
+### Security
+- Use constant-time checksum-bit comparison during BIP39 mnemonic validation in split and recovery (JS v0.4.1 parity)
+
 ## [0.4.0] - 2026-01-29
 
 ### Versioning Note (Alignment)
 - This repository is aligned to **v0.4.0** to match the specification + whitepaper release.
-- Previously documented changes under a draft **v0.5.0** have been **merged into v0.4.0** to keep a single cross-repo version.
 
 ### Indexing Policy (CRITICAL)
 - **BIP39-native indexing remains 0-based** (wordlist positions \(0..2047\)).
@@ -110,7 +114,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-[Unreleased]: https://github.com/GRIFORTIS/schiavinato-sharing-py/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/GRIFORTIS/schiavinato-sharing-py/compare/v0.4.1...HEAD
+[0.4.1]: https://github.com/GRIFORTIS/schiavinato-sharing-py/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/GRIFORTIS/schiavinato-sharing-py/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/GRIFORTIS/schiavinato-sharing-py/compare/v0.1.0...v0.3.0
 [0.1.0]: https://github.com/GRIFORTIS/schiavinato-sharing-py/releases/tag/v0.1.0

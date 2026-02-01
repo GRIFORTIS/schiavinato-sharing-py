@@ -12,7 +12,7 @@ Human-executable secret sharing for BIP39 mnemonics using GF(2053).
 
 ## ⚠️ Status: Work in Progress
 
-**This library is functional but experimental (v0.4.0).**
+**This library is functional but experimental (v0.4.1).**
 
 It is **not professionally audited**. Do not use for real funds until you have done your own review and the project has undergone independent security review.
 
@@ -20,7 +20,7 @@ It is **not professionally audited**. Do not use for real funds until you have d
 
 - Core GF(2053) arithmetic, polynomial ops, Lagrange interpolation
 - BIP39 mnemonic split/recover with row + global checksums
-- v0.4.0 parity with JS: dual-path checksum validation, checksum polynomials,
+- v0.4.1 parity with JS: dual-path checksum validation, checksum polynomials,
   security utilities, configurable randomness, and mnemonic helpers
 - Comprehensive test suite (62 tests) with cross-implementation vectors
 

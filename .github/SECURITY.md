@@ -1,6 +1,6 @@
 # Security Policy
 
-## Status: Experimental (v0.4.0)
+## Status: Experimental (v0.4.1)
 
 **This library is functional but experimental and not professionally audited.**
 
@@ -24,5 +24,5 @@ This project is **experimental software** requiring:
 
 ---
 
-*Last updated: January 29, 2026*
+*Last updated: February 1, 2026*
 

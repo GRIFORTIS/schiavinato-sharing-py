@@ -23,7 +23,7 @@ For more information, see the specification at:
 https://github.com/GRIFORTIS/schiavinato-sharing-spec
 """
 
-__version__ = "0.4.0"
+__version__ = "0.4.1"
 __author__ = "GRIFORTIS"
 __license__ = "MIT"
 

@@ -11,6 +11,7 @@ from .checksums import WORDS_PER_ROW, compute_global_integrity_check, compute_ro
 from .field import FIELD_PRIME, mod
 from .lagrange import lagrange_interpolate_at_zero
 from .security import constant_time_equal, secure_wipe_list, secure_wipe_number
+from .seed import validate_bip39_mnemonic
 from .types import RecoveryResult, Share
 
 
@@ -190,7 +191,7 @@ def recover_mnemonic(
 
         # 5. BIP39 checksum validation
         if strict_validation:
-            if not mnemo.check(recovered_mnemonic):
+            if not validate_bip39_mnemonic(recovered_mnemonic, wordlist=wordlist):
                 report.errors["bip39"] = True
 
         # 6. Determine success

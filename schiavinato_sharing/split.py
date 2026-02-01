@@ -15,12 +15,13 @@ from .checksums import (
 from .field import FIELD_PRIME, mod_add
 from .polynomial import evaluate_polynomial, random_polynomial
 from .security import secure_wipe_list
+from .seed import validate_bip39_mnemonic
 from .types import Share
 
 
 def sanitize_mnemonic(mnemonic: str) -> str:
     """Normalize mnemonic by trimming and collapsing whitespace."""
-    return " ".join(mnemonic.split())
+    return " ".join(mnemonic.strip().lower().split())
 
 
 def split_mnemonic(
@@ -32,7 +33,7 @@ def split_mnemonic(
     """
     Splits a BIP39 mnemonic into n Shamir shares with threshold k.
 
-    Implements the Schiavinato Sharing scheme (v0.5.0):
+    Implements the Schiavinato Sharing scheme:
     1. Validates the BIP39 mnemonic
     2. Converts words to indices (1-2048, 1-based BIP39 indexing)
     3. Creates degree-(k-1) polynomials for word secrets
@@ -91,9 +92,13 @@ def split_mnemonic(
     # Normalize and validate mnemonic
     normalized_mnemonic = sanitize_mnemonic(mnemonic)
 
-    # Use mnemonic library for validation
-    mnemo = Mnemonic("english")
-    if not mnemo.check(normalized_mnemonic):
+    # Get default English wordlist if none provided
+    if wordlist is None:
+        mnemo = Mnemonic("english")
+        wordlist = mnemo.wordlist
+
+    # Constant-time BIP39 checksum validation (JS v0.4.1 parity)
+    if not validate_bip39_mnemonic(normalized_mnemonic, wordlist=wordlist):
         raise ValueError("Invalid BIP39 mnemonic: checksum verification failed.")
 
     # Split into words
@@ -102,10 +107,6 @@ def split_mnemonic(
 
     if word_count not in [12, 24]:
         raise ValueError(f"Unsupported word count: {word_count}. Must be 12 or 24.")
-
-    # Get wordlist
-    if wordlist is None:
-        wordlist = mnemo.wordlist
 
     # Convert words to indices (1-based BIP39 indices)
     word_indices = []
