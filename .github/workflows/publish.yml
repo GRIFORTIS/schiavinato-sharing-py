@@ -37,7 +37,7 @@ jobs:
           import tomllib
           
           tag = os.environ["TAG_NAME"]
-          if not re.fullmatch(r"v\\d+\\.\\d+\\.\\d+", tag):
+          if not re.fullmatch(r"v\d+\.\d+\.\d+", tag):
               raise SystemExit(f"Invalid release tag format: {tag!r} (expected vX.Y.Z)")
           
           pyproject = tomllib.loads(Path("pyproject.toml").read_text(encoding="utf-8"))
