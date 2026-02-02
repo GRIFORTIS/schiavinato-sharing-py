@@ -30,6 +30,7 @@ jobs:
           echo "Release tag: ${TAG_NAME}"
           echo "Checked out SHA: $(git rev-parse HEAD)"
           python - <<'PY'
+          import ast
           import os
           import re
           import sys
@@ -50,16 +51,24 @@ jobs:
               raise SystemExit(
                   f"Tag/version mismatch: tag={tag!r} but pyproject.toml version={version!r}"
               )
-          
-          import schiavinato_sharing  # noqa: E402
-          
-          if getattr(schiavinato_sharing, "__version__", None) != version:
+
+          init_path = Path("schiavinato_sharing/__init__.py")
+          tree = ast.parse(init_path.read_text(encoding="utf-8"), filename=str(init_path))
+          init_version = None
+          for node in tree.body:
+              if isinstance(node, ast.Assign) and len(node.targets) == 1:
+                  target = node.targets[0]
+                  if isinstance(target, ast.Name) and target.id == "__version__":
+                      if isinstance(node.value, ast.Constant) and isinstance(node.value.value, str):
+                          init_version = node.value.value
+                          break
+          if init_version != version:
               raise SystemExit(
-                  f"__version__ mismatch: schiavinato_sharing.__version__={schiavinato_sharing.__version__!r} "
+                  f"__version__ mismatch: schiavinato_sharing/__init__.py has {init_version!r} "
                   f"but pyproject.toml version={version!r}"
               )
-          
-          print(f"OK: tag={tag} version={version} __version__={schiavinato_sharing.__version__}")
+
+          print(f"OK: tag={tag} version={version} __version__={init_version}")
           PY
 
       - name: Install dependencies
