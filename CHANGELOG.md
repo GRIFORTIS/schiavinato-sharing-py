@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.2] - 2026-02-02
+
+### Documentation
+- Align repository wording/structure with the HTML/JS implementations (badges, disclaimer, section order)
+- Update canonical links to point to `schiavinato-sharing` (spec repo), removing legacy spec-repo references
+
 ## [0.4.1] - 2026-02-01
 
 ### Security
@@ -18,9 +24,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This repository is aligned to **v0.4.0** to match the specification + whitepaper release.
 
 ### Indexing Policy (CRITICAL)
-- **BIP39-native indexing remains 0-based** (wordlist positions \(0..2047\)).
-- **Schiavinato Sharing math is 1-based** (word indices \(1..2048\)) and is what is used as secrets in GF(2053).
-- Any \(+1/-1\) conversion is allowed **only** at the BIP39 <-> Schiavinato boundary (wordlist position <-> Schiavinato word index).
+- **Schiavinato Sharing uses 1-based BIP39 word indices** (word indices \(1..2048\)) as secrets in GF(2053).
+- Some BIP39 plumbing uses **0-based wordlist positions** (\(0..2047\)) internally; conversions must remain boundary-only and must never change the scheme semantics.
 
 ### Changed - Share Display Format (merged)
 - Share values use dual-reference format for clarity:
@@ -109,12 +114,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Repository**: https://github.com/GRIFORTIS/schiavinato-sharing-py
 - **JavaScript Library**: https://github.com/GRIFORTIS/schiavinato-sharing-js
-- **Specification**: https://github.com/GRIFORTIS/schiavinato-sharing-spec
+- **Canonical protocol + specs**: https://github.com/GRIFORTIS/schiavinato-sharing
 - **Organization**: https://github.com/GRIFORTIS
 
 ---
 
-[Unreleased]: https://github.com/GRIFORTIS/schiavinato-sharing-py/compare/v0.4.1...HEAD
+[Unreleased]: https://github.com/GRIFORTIS/schiavinato-sharing-py/compare/v0.4.2...HEAD
+[0.4.2]: https://github.com/GRIFORTIS/schiavinato-sharing-py/compare/v0.4.1...v0.4.2
 [0.4.1]: https://github.com/GRIFORTIS/schiavinato-sharing-py/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/GRIFORTIS/schiavinato-sharing-py/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/GRIFORTIS/schiavinato-sharing-py/compare/v0.1.0...v0.3.0

@@ -20,10 +20,10 @@ Basic usage:
     ...     print("Recovered:", result.mnemonic)
 
 For more information, see the specification at:
-https://github.com/GRIFORTIS/schiavinato-sharing-spec
+https://github.com/GRIFORTIS/schiavinato-sharing
 """
 
-__version__ = "0.4.1"
+__version__ = "0.4.2"
 __author__ = "GRIFORTIS"
 __license__ = "MIT"
 

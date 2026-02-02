@@ -1,17 +1,20 @@
 # Security Policy
 
-## Status: Experimental (v0.4.1)
+## Status: Experimental (Not Audited)
 
-**This library is functional but experimental and not professionally audited.**
+**This library is experimental and has NOT been professionally audited.**
 
-Do not use for real funds unless you have reviewed the code and understand the risks.
+**DO NOT USE IT FOR REAL FUNDS!**
+
+For the canonical security posture, see:
+- https://github.com/GRIFORTIS/schiavinato-sharing/blob/main/SECURITY.md
 
 ## Reporting Vulnerabilities
 
 If you discover a security issue:
 
 - **Email**: security@grifortis.com
-- **GitHub Security Advisory**: Use the "Security" tab
+- **GitHub Security Advisory**: Use the "Security" tab in this repository
 
 ## Future Security Status
 
@@ -24,5 +27,5 @@ This project is **experimental software** requiring:
 
 ---
 
-*Last updated: February 1, 2026*
+*Last updated: February 2, 2026*
 

@@ -1,43 +1,91 @@
-# schiavinato-sharing-py
+# Schiavinato Sharing (Python)
 
-**Python library for Schiavinato Sharing**
-
-Human-executable secret sharing for BIP39 mnemonics using GF(2053).
-
+[![Security: Experimental](https://img.shields.io/badge/Security-⚠️%20EXPERIMENTAL%20⚠️-red)](https://github.com/GRIFORTIS/schiavinato-sharing/blob/main/SECURITY.md)
+[![CI](https://github.com/GRIFORTIS/schiavinato-sharing-py/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/GRIFORTIS/schiavinato-sharing-py/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/GRIFORTIS/schiavinato-sharing-py/actions/workflows/codeql.yml/badge.svg?branch=main)](https://github.com/GRIFORTIS/schiavinato-sharing-py/actions/workflows/codeql.yml)
+[![codecov](https://codecov.io/gh/GRIFORTIS/schiavinato-sharing-py/graph/badge.svg)](https://codecov.io/gh/GRIFORTIS/schiavinato-sharing-py)
 [![PyPI version](https://img.shields.io/pypi/v/schiavinato-sharing.svg)](https://pypi.org/project/schiavinato-sharing/)
 [![Python versions](https://img.shields.io/pypi/pyversions/schiavinato-sharing.svg)](https://pypi.org/project/schiavinato-sharing/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+> ## ⚠️ WARNING: EXPERIMENTAL SOFTWARE ⚠️
+> 
+>DO NOT USE IT FOR REAL FUNDS!
+>
+> Schiavinato Sharing specification and implementations have NOT been audited. Use for testing, learning, and experimentation only. See [SECURITY](https://github.com/GRIFORTIS/schiavinato-sharing/blob/main/SECURITY.md) for details.
+>
+>We invite **cryptographers** and **developers** to review the spec and software. See [CONTRIBUTING](https://github.com/GRIFORTIS/schiavinato-sharing/blob/main/CONTRIBUTING.md) to know more.
+
+Python implementation of **Schiavinato Sharing**: dual-mode (manual + software) \(k\)-of-\(n\) threshold secret sharing for **BIP39 mnemonics** over **GF(2053)**. Designed for offline/air-gapped workflows, with manual-fallback compatibility.
 
 ---
 
-## ⚠️ Status: Work in Progress
+## What is this?
 
-**This library is functional but experimental (v0.4.1).**
+**Schiavinato Sharing** is a dual-mode (**manual + software**) \(k\)-of-\(n\) threshold secret sharing scheme for **BIP39 mnemonics**. It operates directly on the **1-indexed BIP39 word indices** over the prime field **GF(2053)**, so the recovered secret is a standard BIP39 mnemonic compatible with modern wallets.
 
-It is **not professionally audited**. Do not use for real funds until you have done your own review and the project has undergone independent security review.
+**In this Python implementation, you can:**
 
-### Current Status
-
-- Core GF(2053) arithmetic, polynomial ops, Lagrange interpolation
-- BIP39 mnemonic split/recover with row + global checksums
-- v0.4.1 parity with JS: dual-path checksum validation, checksum polynomials,
-  security utilities, configurable randomness, and mnemonic helpers
-- Comprehensive test suite (62 tests) with cross-implementation vectors
+- Split a BIP39 mnemonic into \(k\)-of-\(n\) shares (`Share`)
+- Recover the original BIP39 mnemonic from \(k\) shares (`RecoveryResult`)
+- Validate inputs and share integrity during split/recovery to prevent silent mistakes
 
 ---
 
-## 🎯 What is Schiavinato Sharing?
+## Links
 
-Schiavinato Sharing is a secret-sharing scheme specifically designed for **BIP39 mnemonic phrases** using **basic arithmetic in GF(2053)**. Unlike other schemes, it can be performed entirely **by hand** with pencil and paper, making it ideal for:
-
-- 🏦 Long-term inheritance planning
-- 🔐 Disaster recovery scenarios
-- 🌍 Situations where digital tools are unavailable or untrusted
-- 👨‍👩‍👧‍👦 Family backup strategies
+- **Canonical protocol + specs**: [schiavinato-sharing](https://github.com/GRIFORTIS/schiavinato-sharing)
+- **Whitepaper**: [PDF](https://github.com/GRIFORTIS/schiavinato-sharing/releases/latest/download/WHITEPAPER.pdf) | [LaTeX](https://github.com/GRIFORTIS/schiavinato-sharing/blob/main/WHITEPAPER.tex)
+- **Test Vectors**: [TEST_VECTORS](https://github.com/GRIFORTIS/schiavinato-sharing/blob/main/TEST_VECTORS.md)
+- **Canonical security posture**: [SECURITY](https://github.com/GRIFORTIS/schiavinato-sharing/blob/main/SECURITY.md)
+- **HTML implementation**: [schiavinato-sharing-html](https://github.com/GRIFORTIS/schiavinato-sharing-html)
+- **JavaScript implementation**: [schiavinato-sharing-js](https://github.com/GRIFORTIS/schiavinato-sharing-js)
 
 ---
 
-## 📦 Installation
+## Security
+
+This library implements well-established cryptographic principles but has **NOT** been professionally audited.
+
+**Use only for**: testing, learning, experimentation.
+
+**Canonical security posture**: [schiavinato-sharing/SECURITY](https://github.com/GRIFORTIS/schiavinato-sharing/blob/main/SECURITY.md)
+
+---
+
+## Verify Before Use (Required)
+
+**CRITICAL**: Before using with real crypto seeds, verify the package and/or release artifacts haven't been tampered with.
+
+### Option A: Verify release artifacts (recommended for highest assurance)
+
+This repository's releases include:
+- `CHECKSUMS-PYPI.txt` (+ detached signature `CHECKSUMS-PYPI.txt.asc`)
+- Python package artifacts (`*.whl`, `*.tar.gz`) (+ optional detached signatures `*.asc`)
+
+Import the GRIFORTIS public key and verify signatures before use.
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/GRIFORTIS/schiavinato-sharing-py/main/GRIFORTIS-PGP-PUBLIC-KEY.asc | gpg --import
+gpg --fingerprint security@grifortis.com
+```
+
+**Expected**: `7921 FD56 9450 8DA4 020E  671F 4CFE 6248 C57F 15DF`
+
+Then verify release assets (examples):
+
+```bash
+gpg --verify CHECKSUMS-PYPI.txt.asc CHECKSUMS-PYPI.txt
+sha256sum --check CHECKSUMS-PYPI.txt --ignore-missing
+```
+
+### Option B: Verify the PyPI artifacts (supply-chain sanity check)
+
+- Pin exact versions and use lockfiles for repeatable installs
+- Prefer offline installs from a locally verified wheel/sdist
+---
+
+## Installation
 
 ```bash
 pip install schiavinato-sharing
@@ -45,185 +93,75 @@ pip install schiavinato-sharing
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
-### Splitting a Mnemonic
+### Split a mnemonic
 
 ```python
 from schiavinato_sharing import split_mnemonic
 
-mnemonic = 'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about'
-k = 2  # threshold
-n = 3  # total shares
-
-shares = split_mnemonic(mnemonic, k, n)
+mnemonic = "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about"
+shares = split_mnemonic(mnemonic, 2, 3)
 print(shares[0].share_number)
-print(shares[0].word_shares[:3])
-print(shares[0].checksum_shares)
-print(shares[0].global_integrity_check_share)
 ```
 
-### Recovering a Mnemonic
+### Recover a mnemonic
 
 ```python
 from schiavinato_sharing import recover_mnemonic
 
 result = recover_mnemonic(shares[:2], word_count=12, strict_validation=True)
-if result.success:
-    print(result.mnemonic)
-else:
-    print(result.errors)
+if not result.success:
+    raise RuntimeError(str(result.errors))
+print(result.mnemonic)
 ```
 
 ---
 
-## 📚 Documentation
+## API Reference (high-level)
 
-### Specification
+Stable entry points:
+- `split_mnemonic(mnemonic, k, n, wordlist=None)`
+- `recover_mnemonic(shares, word_count, strict_validation=True, wordlist=None)`
 
-This library implements the Schiavinato Sharing specification:
-
-🔗 **[Specification Repository](https://github.com/GRIFORTIS/schiavinato-sharing-spec)**
-
-Key documents:
-- [Whitepaper](https://github.com/GRIFORTIS/schiavinato-sharing-spec/releases/latest/download/WHITEPAPER.pdf) ([LaTeX source](https://github.com/GRIFORTIS/schiavinato-sharing-spec/blob/main/WHITEPAPER.tex)) – Complete mathematical description
-- [Test Vectors](https://github.com/GRIFORTIS/schiavinato-sharing-spec/blob/main/TEST_VECTORS.md) – Validation data
-- [Reference Implementation](https://github.com/GRIFORTIS/schiavinato-sharing-spec/tree/main/reference-implementation) – HTML tool
-
-### Sister Implementation
-
-The JavaScript library is the primary implementation for end users:
-
-🔗 **[JavaScript Library](https://github.com/GRIFORTIS/schiavinato-sharing-js)**
-
-```bash
-npm install @grifortis/schiavinato-sharing
-```
+Advanced exports (field arithmetic, Lagrange helpers, checksum helpers, secure wipe utilities) are also available for integration/testing; see the package exports in `schiavinato_sharing/__init__.py`.
 
 ---
 
-## 🧪 Development
+## Conformance Validation
 
-### Setup
+This implementation is validated against canonical test vectors:
+- [TEST_VECTORS](https://github.com/GRIFORTIS/schiavinato-sharing/blob/main/TEST_VECTORS.md)
+
+---
+
+## Functional Validation (Run Tests)
 
 ```bash
-# Clone the repository
-git clone https://github.com/GRIFORTIS/schiavinato-sharing-py.git
-cd schiavinato-sharing-py
-
-# Create virtual environment
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install development dependencies
-pip install -e ".[dev]"
-
-# Run tests
-pytest
-
-# Type checking
+source venv/bin/activate  # On Windows: venv\\Scripts\\activate
+pip install -e \".[dev]\"
 mypy schiavinato_sharing
-
-# Linting
 ruff check .
-
-# Formatting
-black .
-```
-
-### Project Structure
-
-```
-schiavinato-sharing-py/
-├── schiavinato_sharing/
-│   ├── __init__.py
-│   ├── field.py              # GF(2053) field arithmetic
-│   ├── polynomial.py         # Polynomial operations
-│   ├── lagrange.py           # Lagrange interpolation
-│   ├── split.py              # Mnemonic splitting
-│   ├── recover.py            # Mnemonic recovery
-│   ├── checksums.py          # Checksum generation/validation
-│   ├── security.py           # Constant-time comparisons + best-effort wiping
-│   ├── seed.py               # Mnemonic helpers + native BIP39 checksum validation
-│   └── types.py              # Dataclasses and typed error shape
-├── tests/
-│   └── ...
-├── pyproject.toml
-└── README.md
+black --check .
+pytest
 ```
 
 ---
 
-## 🤝 Contributing
+## Compatibility
 
-We welcome contributions! This project is in early development, so there's plenty to do.
+- **Spec version**: v0.4.0
+- **Python**: 3.10+
+---
 
-### How to Help
+## Contributing
 
-- 🐍 **Implement core functionality** – Help write the library!
-- 🧪 **Write tests** – Ensure correctness with comprehensive tests
-- 📖 **Documentation** – Improve README, docstrings, examples
-- 🔍 **Review** – Check for bugs, security issues, or improvements
-
-### Getting Started
-
-1. **Read the spec**: [Schiavinato Sharing Whitepaper](https://github.com/GRIFORTIS/schiavinato-sharing-spec/releases/latest/download/WHITEPAPER.pdf) ([LaTeX source](https://github.com/GRIFORTIS/schiavinato-sharing-spec/blob/main/WHITEPAPER.tex))
-2. **Check test vectors**: [TEST_VECTORS.md](https://github.com/GRIFORTIS/schiavinato-sharing-spec/blob/main/TEST_VECTORS.md)
-3. **Look at JS implementation**: [schiavinato-sharing-js](https://github.com/GRIFORTIS/schiavinato-sharing-js) for reference
-4. **Open an issue**: Discuss your contribution before starting
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
+See [`CONTRIBUTING.md`](./CONTRIBUTING.md).
 
 ---
 
-## 🔒 Security
+## License
 
-### Security Status: ⚠️ EXPERIMENTAL (Not Audited)
-
-This library is **experimental software** that has NOT been professionally audited.
-
-**DO NOT USE FOR REAL FUNDS** until:
-- [ ] Professional security audit
-- [ ] Extensive peer review
-- [ ] v1.0.0 release
-
-See [SECURITY.md](.github/SECURITY.md) for reporting vulnerabilities.
-
----
-
-## 📄 License
-
-[MIT License](LICENSE) – see file for details.
-
----
-
-## 🔗 Related Projects
-
-- **[Specification](https://github.com/GRIFORTIS/schiavinato-sharing-spec)** – Whitepaper and reference implementation
-- **[JavaScript Library](https://github.com/GRIFORTIS/schiavinato-sharing-js)** – Primary npm library implementation
-- **[GRIFORTIS](https://github.com/GRIFORTIS)** – Organization homepage
-
----
-
-## 📬 Contact
-
-- 📖 **Documentation**: [Specification repo](https://github.com/GRIFORTIS/schiavinato-sharing-spec)
-- 🐛 **Bug Reports**: [Open an issue](https://github.com/GRIFORTIS/schiavinato-sharing-py/issues)
-- 💬 **Discussions**: [GitHub Discussions](https://github.com/GRIFORTIS/schiavinato-sharing-py/discussions)
-- 📧 **Email**: support@grifortis.com
-
----
-
-## 🙏 Acknowledgments
-
-This implementation is based on:
-- Shamir, A. (1979). "How to Share a Secret"
-- BIP39: Mnemonic code for generating deterministic keys
-- The Schiavinato Sharing specification by **Renato Schiavinato Lopez**, creator of Schiavinato Sharing and founder of GRIFORTIS
-
----
-
-**Made with ❤️ by [GRIFORTIS](https://github.com/GRIFORTIS)**
-
-*Empowering digital sovereignty through open-source tools.*
+[MIT License](LICENSE)
 

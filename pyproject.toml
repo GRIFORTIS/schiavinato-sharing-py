@@ -4,10 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "schiavinato-sharing"
-version = "0.4.1"
+version = "0.4.2"
 description = "Human-executable secret sharing for BIP39 mnemonics using GF(2053)"
 readme = "README.md"
-license = {text = "MIT"}
+license = "MIT"
+license-files = ["LICENSE"]
 authors = [
     {name = "GRIFORTIS", email = "info@grifortis.com"}
 ]
@@ -56,7 +57,7 @@ dev = [
 
 [project.urls]
 Homepage = "https://github.com/GRIFORTIS/schiavinato-sharing-py"
-Documentation = "https://github.com/GRIFORTIS/schiavinato-sharing-spec"
+Documentation = "https://github.com/GRIFORTIS/schiavinato-sharing"
 Repository = "https://github.com/GRIFORTIS/schiavinato-sharing-py"
 Issues = "https://github.com/GRIFORTIS/schiavinato-sharing-py/issues"
 Changelog = "https://github.com/GRIFORTIS/schiavinato-sharing-py/blob/main/CHANGELOG.md"
