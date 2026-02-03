@@ -1,31 +1,18 @@
-# Security Policy
+# Security Policy (Python Implementation)
 
-## Status: Experimental (Not Audited)
+> ## ⚠️ WARNING: EXPERIMENTAL SOFTWARE ⚠️
+> 
+>DO NOT USE IT FOR REAL FUNDS!
+>
+> Schiavinato Sharing specification and implementations have NOT been audited. Use for testing, learning, and experimentation only. See [SECURITY](https://github.com/GRIFORTIS/schiavinato-sharing/blob/main/.github/SECURITY.md) for details.
+>
+>We invite **cryptographers** and **developers** to review the spec and software. See [CONTRIBUTING](https://github.com/GRIFORTIS/schiavinato-sharing/blob/main/.github/CONTRIBUTING.md) to know more.
 
-**This library is experimental and has NOT been professionally audited.**
 
-**DO NOT USE IT FOR REAL FUNDS!**
+## Canonical security policy
 
-For the canonical security posture, see:
-- https://github.com/GRIFORTIS/schiavinato-sharing/blob/main/SECURITY.md
+This repository **does not define its own security posture or disclosure process**.
 
-## Reporting Vulnerabilities
-
-If you discover a security issue:
-
-- **Email**: security@grifortis.com
-- **GitHub Security Advisory**: Use the "Security" tab in this repository
-
-## Future Security Status
-
-This project is **experimental software** requiring:
-- Professional security audit
-- Peer review
-- Extensive testing
-
-**DO NOT USE FOR REAL FUNDS** until v1.0.0 is released after full security review.
-
----
-
-*Last updated: February 2, 2026*
+Use the canonical policy in:
+- [https://github.com/GRIFORTIS/schiavinato-sharing/blob/main/.github/SECURITY.md](https://github.com/GRIFORTIS/schiavinato-sharing/blob/main/.github/SECURITY.md)
 
