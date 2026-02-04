@@ -94,7 +94,19 @@ def recover_mnemonic(
                 report.errors["generic"] = f"Share {i+1} missing share_number field."
                 return report
 
-            share_numbers.append(share.share_number)
+            if not isinstance(share.share_number, int):
+                report.errors["generic"] = (
+                    f"Share {i+1} share_number must be an integer between 1 and {FIELD_PRIME - 1}."
+                )
+                return report
+
+            if share.share_number <= 0 or share.share_number >= FIELD_PRIME:
+                report.errors["generic"] = (
+                    f"Share {i+1} share_number must be between 1 and {FIELD_PRIME - 1}."
+                )
+                return report
+
+            share_numbers.append(mod(share.share_number))
 
             if len(share.word_shares) != word_count:
                 report.errors["generic"] = (
@@ -111,7 +123,7 @@ def recover_mnemonic(
                 return report
 
         if len(share_numbers) != len(set(share_numbers)):
-            report.errors["generic"] = "Share numbers must be unique."
+            report.errors["generic"] = "Share numbers must be unique after normalization."
             return report
 
         # 2. Recover all secret numbers via Lagrange Interpolation

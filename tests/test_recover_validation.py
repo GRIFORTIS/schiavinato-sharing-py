@@ -49,6 +49,60 @@ def test_recover_rejects_duplicate_share_numbers():
     assert "unique" in result.errors["generic"].lower()
 
 
+def test_recover_rejects_share_number_zero():
+    share1 = Share(
+        share_number=0,
+        word_shares=[0] * 12,
+        checksum_shares=[0, 0, 0, 0],
+        global_integrity_check_share=0,
+    )
+    share2 = Share(
+        share_number=2,
+        word_shares=[0] * 12,
+        checksum_shares=[0, 0, 0, 0],
+        global_integrity_check_share=0,
+    )
+    result = recover_mnemonic([share1, share2], 12)
+    assert result.success is False
+    assert "between 1 and" in result.errors["generic"]
+
+
+def test_recover_rejects_share_number_2053():
+    share1 = Share(
+        share_number=2053,
+        word_shares=[0] * 12,
+        checksum_shares=[0, 0, 0, 0],
+        global_integrity_check_share=0,
+    )
+    share2 = Share(
+        share_number=2,
+        word_shares=[0] * 12,
+        checksum_shares=[0, 0, 0, 0],
+        global_integrity_check_share=0,
+    )
+    result = recover_mnemonic([share1, share2], 12)
+    assert result.success is False
+    assert "between 1 and" in result.errors["generic"]
+
+
+def test_recover_rejects_share_numbers_normalizing_to_same_value():
+    share1 = Share(
+        share_number=1,
+        word_shares=[0] * 12,
+        checksum_shares=[0, 0, 0, 0],
+        global_integrity_check_share=0,
+    )
+    share2 = Share(
+        share_number=2054,
+        word_shares=[0] * 12,
+        checksum_shares=[0, 0, 0, 0],
+        global_integrity_check_share=0,
+    )
+    result = recover_mnemonic([share1, share2], 12)
+    assert result.success is False
+    assert "between 1 and" in result.errors["generic"]
+
+
 def test_recover_rejects_out_of_range_share_value():
     share1 = Share(
         share_number=1,

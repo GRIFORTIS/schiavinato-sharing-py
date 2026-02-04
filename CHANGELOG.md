@@ -7,11 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.4.2] - 2026-02-02
+## [0.4.2] - 2026-02-04
 
 ### Documentation
 - Align repository wording/structure with the HTML/JS implementations (badges, disclaimer, section order)
 - Update canonical links to point to `schiavinato-sharing` (spec repo), removing legacy spec-repo references
+
+### Fixed
+- Reject invalid share numbers during recovery (must be integer \(1..2052\); no silent modulo wraparound/collisions)
+- Add recovery validation tests for invalid share numbers (0 and out-of-range)
+
+### Changed
+- Move utility scripts into `scripts/` (and remove the previous root-level copies)
+- Remove QR grid SVG templates from this repo (they live under `schiavinato-sharing/docs/`)
 
 ## [0.4.1] - 2026-02-01
 
@@ -24,8 +32,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This repository is aligned to **v0.4.0** to match the specification + whitepaper release.
 
 ### Indexing Policy (CRITICAL)
-- **Schiavinato Sharing uses 1-based BIP39 word indices** (word indices \(1..2048\)) as secrets in GF(2053).
-- Some BIP39 plumbing uses **0-based wordlist positions** (\(0..2047\)) internally; conversions must remain boundary-only and must never change the scheme semantics.
+- **BIP39-native indexing remains 0-based** (wordlist positions \(0..2047\)).
+- **Schiavinato Sharing math is 1-based** (word indices \(1..2048\)) and is what is used as secrets in GF(2053).
+- Any \(+1/-1\) conversion is allowed **only** at the BIP39 <-> Schiavinato boundary (wordlist position <-> Schiavinato word index).
 
 ### Changed - Share Display Format (merged)
 - Share values use dual-reference format for clarity:
@@ -50,7 +59,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Function name: `compute_global_checksum()` → `compute_global_integrity_check()` (breaking change)
 
 ### Fixed
-- Reject invalid share numbers during recovery (must be integer \(1..2052\); no silent modulo wraparound)
 - Mnemonic sanitization now lowercases input before validation/splitting (canonical HTML parity)
 
 ### Tests/Docs
@@ -112,10 +120,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Links
 
-- **Repository**: https://github.com/GRIFORTIS/schiavinato-sharing-py
-- **JavaScript Library**: https://github.com/GRIFORTIS/schiavinato-sharing-js
-- **Canonical protocol + specs**: https://github.com/GRIFORTIS/schiavinato-sharing
-- **Organization**: https://github.com/GRIFORTIS
+- **Repository**: [schiavinato-sharing-py](https://github.com/GRIFORTIS/schiavinato-sharing-py)
+- **JavaScript Library**: [schiavinato-sharing-js](https://github.com/GRIFORTIS/schiavinato-sharing-js)
+- **Canonical protocol + specs**: [schiavinato-sharing](https://github.com/GRIFORTIS/schiavinato-sharing)
+- **Organization**: [GRIFORTIS](https://github.com/GRIFORTIS)
 
 ---
 

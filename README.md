@@ -35,7 +35,7 @@ Python implementation of **Schiavinato Sharing**: dual-mode (manual + software) 
 ## Links
 
 - **Canonical protocol + specs**: [schiavinato-sharing](https://github.com/GRIFORTIS/schiavinato-sharing)
-- **Whitepaper**: [PDF](https://github.com/GRIFORTIS/schiavinato-sharing/releases/latest/download/WHITEPAPER.pdf) | [LaTeX](https://github.com/GRIFORTIS/schiavinato-sharing/blob/main/whitepaper/WHITEPAPER.tex)
+- **Whitepaper**: [PDF (latest)](https://github.com/GRIFORTIS/schiavinato-sharing/releases/latest/download/WHITEPAPER.pdf) | [Releases (versioned PDF)](https://github.com/GRIFORTIS/schiavinato-sharing/releases) | [LaTeX](https://github.com/GRIFORTIS/schiavinato-sharing/blob/main/whitepaper/WHITEPAPER.tex)
 - **Test Vectors**: [TEST_VECTORS](https://github.com/GRIFORTIS/schiavinato-sharing/blob/main/test_vectors/README.md)
 - **Canonical security posture**: [SECURITY](https://github.com/GRIFORTIS/schiavinato-sharing/blob/main/.github/SECURITY.md)
 - **HTML implementation**: [schiavinato-sharing-html](https://github.com/GRIFORTIS/schiavinato-sharing-html)
@@ -137,7 +137,7 @@ This implementation is validated against canonical test vectors:
 
 ## Functional Validation (Run Tests)
 
-See [`TESTING.md`](./TESTING.md) for the full local testing checklist (CI parity).
+See [`TESTING`](./TESTING.md) for the full local testing checklist (CI parity).
 
 ---
 
@@ -149,7 +149,7 @@ See [`TESTING.md`](./TESTING.md) for the full local testing checklist (CI parity
 
 ## Contributing
 
-See [`.github/CONTRIBUTING.md`](./.github/CONTRIBUTING.md).
+See [CONTRIBUTING](https://github.com/GRIFORTIS/schiavinato-sharing/blob/main/.github/CONTRIBUTING.md).
 
 ---
 
