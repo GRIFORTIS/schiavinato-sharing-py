@@ -49,6 +49,24 @@ def test_recover_rejects_duplicate_share_numbers():
     assert "unique" in result.errors["generic"].lower()
 
 
+def test_recover_rejects_non_integer_share_number():
+    share1 = Share(  # type: ignore[arg-type]
+        share_number="1",
+        word_shares=[0] * 12,
+        checksum_shares=[0, 0, 0, 0],
+        global_integrity_check_share=0,
+    )
+    share2 = Share(
+        share_number=2,
+        word_shares=[0] * 12,
+        checksum_shares=[0, 0, 0, 0],
+        global_integrity_check_share=0,
+    )
+    result = recover_mnemonic([share1, share2], 12)
+    assert result.success is False
+    assert "must be an integer" in result.errors["generic"]
+
+
 def test_recover_rejects_share_number_zero():
     share1 = Share(
         share_number=0,
